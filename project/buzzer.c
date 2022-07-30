@@ -1,9 +1,8 @@
 #include <msp430.h>
 #include "libTimer.h"
 #include "buzzer.h"
-extern int seconds;
-extern char note;
-extern int buttonState;
+char note = 0;
+static int counterForSMTheme = 0;
 
 void buzzer_init()
 {
@@ -26,18 +25,58 @@ void soundSwitch() { // calls buzzer_set_period with value per musical note
   case 'a':
     buzzer_set_period(560);
     break;
+  case 'b':
+    buzzer_set_period(500);
+    break;
   case 'c':
     buzzer_set_period(475);
+    break;
+  case 'd':
+    buzzer_set_period(840);
+    break;
+  case 'e':
+    buzzer_set_period(750);
+    break;
+  case 'f': 
+    buzzer_set_period(710);
     break;
   case 'g':
     buzzer_set_period(630);
     break;
-  case 'f': 
-    buzzer_set_period(750);
+  case 'l':
+    buzzer_set_period(1260);
+    break;
+  case 'x':
+    buzzer_set_period(950);
     break;
   default:
     buzzer_set_period(0);
   }
+}
+
+void sirenNotes() {
+switch(seconds) {
+  case 0: case 8: case 10: case 12: case 24: case 32: case 40: case 42: case 44: case 48: case 54:
+    note = 'c';
+    break;
+  case 2: case 6: case 16: case 18: case 20: case 34: case 38: case 50: case 52: case 56:
+    note = 'a';
+    break;
+  case 4: case 36: case 58: case 59: case 60:
+    note = 'g';
+    break;
+  case 26: case 28:
+    note = 'f';
+    break;
+  case 65: // song over: resets button, note, and time
+    buttonState = 0;
+    note = 0;
+    seconds = 0;
+    break;
+  default:
+    note = 0;
+    break;
+ }
 }
 
 // Mary had a little lamb switch of note per time
@@ -66,7 +105,56 @@ void MLLNotes() {
   }
 }
 
-void buzzer_set_period(short cycles) /* buzzer clock = 2MHz.  (period of 1k results in 2kHz tone) */
+void song3Notes(){
+  switch(seconds){
+  case 5: case 6: case 7: case 33: case 34:
+    note = 'e';
+    break; 
+  case 11: case 12: case 13: case 39: case 40:
+    note = 'x';
+    break; 
+  case 19: case 20: case 21: case 37: case 38: 
+    note = 'g';
+    break;
+  case 28: case 29: case 30: case 31: 
+    note = 'l';
+    break;
+  case 45:
+    buttonState = 0;
+    note = 0;
+    seconds = 0;
+    break;
+  default:
+    break;
+  }
+}
+
+void song4Notes(){
+  switch(seconds){
+  case 5: case 6: case 24: case 25:
+    note = 'd';
+    break; 
+  case 11: case 12: case 40:
+    note = 'x';
+    break; 
+  case 19: case 20: case 21: case 37: case 38: 
+    note = 'b';
+    break;
+  case 14: case 15: case 16: case 28: case 29: case 30: case 31: 
+    note = 'l';
+    break;
+  case 45:
+    buttonState = 0;
+    note = 0;
+    seconds = 0;
+    break;
+  default:
+    break;
+  }
+}
+
+
+void buzzer_set_period(short cycles) /* buzzer clock = 2MHz. (period of 1k results in 2kHz tone) */
 {
   CCR0 = cycles;
   CCR1 = cycles >> 1;/* one half cycle */

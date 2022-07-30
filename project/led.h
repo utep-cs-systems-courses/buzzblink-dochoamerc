@@ -7,5 +7,11 @@
 
 void led_init();
 void MLLLights();
+void sirenLED();
+void song3LED();
+void song4LED();
+
+extern char note;
+extern int seconds;
 
 #endif // included

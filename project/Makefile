@@ -1,5 +1,5 @@
 # makfile configuration
-COMMON_OBJECTS  = buzzer.o switches.o led.o blinkbuzzMain.o 
+COMMON_OBJECTS  = buzzer.o timer.o musicPlayer.o switches.o led.o blinkbuzzMain.o 
 CPU             = msp430g2553
 CFLAGS          = -mmcu=${CPU} -Ih/
 LDFLAGS 	= -L/opt/ti/msp430_gcc/include
@@ -26,5 +26,7 @@ clean: $^
 buzzer.c: buzzer.h
 led.c: led.h
 switches.c: switches.h
+timer.c: timer.h
+musicPlayer.c: musicPlayer.h
 blinkbuzzMain.c: buzzer.h led.h switches.h
 wdInterruptHandler.o: led.h

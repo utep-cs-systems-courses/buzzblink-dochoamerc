@@ -2,44 +2,61 @@
 #include "switches.h"
 #include "led.h"
 #include "buzzer.h"
+#include "musicPlayer.h"
 #include "libTimer.h"
-extern int buttonState;
-extern void playMLL(void);
+int buttonState = 0;     // tracker button press activation
 
-void switches_init() {
-  P1REN |= SWITCHES;		/* enables resistors for switches */
-  P1IE |= SWITCHES;		/* enable interrupts from switches */
-  P1OUT |= SWITCHES;		/* pull-ups for switches */
-  P1DIR &= ~SWITCHES;		/* set switches' bits for input */
+static char
+switch_update_interrupt_sense()
+{
+  char p2val = P2IN;  /* update switch interrupt to detect changes from current buttons */
+  P2IES |= (p2val & SWITCHES);/* if switch up, sense down */
+  P2IES &= (p2val | ~SWITCHES);/* if switch down, sense up */
+  return p2val;
+}
+
+void
+switches_init()/* setup switch */
+{
+  P2REN |= SWITCHES;/* enables resistors for switches */
+  P2IE = SWITCHES;/* enable interrupts from switches delete |=*/
+  P2OUT |= SWITCHES;/* pull-ups for switches */
+  P2DIR &= ~SWITCHES;/* set switches' bits for input */
 }
 
 void switch_interrupt_handler()
 {
-  char p1val = P1IN;		/* switch is in P1 */
+  char p2val = switch_update_interrupt_sense();		/* switch is in P2 */
   
-/* update switch interrupt sense to detect changes from current buttons */
-  P1IES |= (p1val & SWITCHES);	/* if switch up, sense down */
-  P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
-
 /* up=red, down=green */
-  if (!(p1val & SW1)) {          /* button pressed  */
+  if(buttonState == 0 && p2val & SW1 && p2val & SW2 && p2val & SW3 && p2val & SW4){
+    buzzer_set_period(0);
+    buttonState = 0;
+  }
+  else if (!(p2val & SW1)) {          /* 1 button pressed  */
+    seconds = 0;
     buttonState = 1;
   }
-
-  switch(buttonState){
-  case 0:
-    break;
-  case 1:
-    playMLL();
-    break;
+  else if (!(p2val & SW2)) {          /* 2 button pressed  */
+    seconds = 0;
+    buttonState = 2;
   }
+  else if (!(p2val & SW3)) {          /* 3 button pressed  */
+    seconds = 0;
+    buttonState = 3;
+  }
+  else if (!(p2val & SW4)) {          /* 4 button pressed  */
+    seconds = 0;
+    buttonState = 4;
+  }  
+  player();
 }
 
-/* Switch on P1 (S2) */
-void __interrupt_vec(PORT1_VECTOR) Port_1(){
-  if (P1IFG & SWITCHES) {	      /* did a button cause this interrupt? */
-    P1IFG &= ~SWITCHES;		      /* clear pending sw interrupts */
-    switch_interrupt_handler();	/* single handler for all switches */
+/* Switch on P2 */
+void
+__interrupt_vec(PORT2_VECTOR) Port_2(){
+if (P2IFG & SWITCHES) {      /* did a button cause this interrupt? */ 
+  P2IFG &= ~SWITCHES;      /* clear pending sw interrupts */
+    switch_interrupt_handler();/* single handler for all switches */
   }
 }
-
