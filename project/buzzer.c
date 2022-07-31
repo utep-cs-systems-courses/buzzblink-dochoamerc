@@ -43,40 +43,15 @@ void soundSwitch() { // calls buzzer_set_period with value per musical note
   case 'g':
     buzzer_set_period(630);
     break;
-  case 'l':
+  case 'l': //low G
     buzzer_set_period(1260);
     break;
-  case 'x':
+  case 'x': // low C
     buzzer_set_period(950);
     break;
   default:
     buzzer_set_period(0);
   }
-}
-
-void sirenNotes() {
-switch(seconds) {
-  case 0: case 8: case 10: case 12: case 24: case 32: case 40: case 42: case 44: case 48: case 54:
-    note = 'c';
-    break;
-  case 2: case 6: case 16: case 18: case 20: case 34: case 38: case 50: case 52: case 56:
-    note = 'a';
-    break;
-  case 4: case 36: case 58: case 59: case 60:
-    note = 'g';
-    break;
-  case 26: case 28:
-    note = 'f';
-    break;
-  case 65: // song over: resets button, note, and time
-    buttonState = 0;
-    note = 0;
-    seconds = 0;
-    break;
-  default:
-    note = 0;
-    break;
- }
 }
 
 // Mary had a little lamb switch of note per time
@@ -103,6 +78,31 @@ void MLLNotes() {
     note = 0;
     break;
   }
+}
+
+void sirenNotes() {
+switch(seconds) {
+  case 0: case 8: case 10: case 12: case 24: case 32: case 40: case 42: case 44: case 48: case 54:
+    note = 'c';
+    break;
+  case 2: case 6: case 16: case 18: case 20: case 34: case 38: case 50: case 52: case 56:
+    note = 'a';
+    break;
+  case 4: case 36: case 58: case 59: case 60:
+    note = 'l';
+    break;
+  case 26: case 28:
+    note = 'f';
+    break;
+  case 65: // song over: resets button, note, and time
+    buttonState = 0;
+    note = 0;
+    seconds = 0;
+    break;
+  default:
+    note = 0;
+    break;
+ }
 }
 
 void song3Notes(){

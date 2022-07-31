@@ -1,6 +1,6 @@
 #include <msp430.h>
 #include "switches.h"
-#include "led.h"
+//#include "led.h"
 #include "buzzer.h"
 #include "musicPlayer.h"
 #include "libTimer.h"
@@ -22,6 +22,7 @@ switches_init()/* setup switch */
   P2IE = SWITCHES;/* enable interrupts from switches delete |=*/
   P2OUT |= SWITCHES;/* pull-ups for switches */
   P2DIR &= ~SWITCHES;/* set switches' bits for input */
+  switch_update_interrupt_sense();
 }
 
 void switch_interrupt_handler()
@@ -39,7 +40,7 @@ void switch_interrupt_handler()
   }
   else if (!(p2val & SW2)) {          /* 2 button pressed  */
     seconds = 0;
-    buttonState = 2;
+    buttonState = 1;
   }
   else if (!(p2val & SW3)) {          /* 3 button pressed  */
     seconds = 0;

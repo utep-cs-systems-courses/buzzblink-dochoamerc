@@ -13,6 +13,5 @@ void switches_init();
 void switch_interrupt_handler();
 
 extern int seconds;
-extern void playMLL(void), playSiren(void);
 
 #endif // included

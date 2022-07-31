@@ -35,25 +35,26 @@ void MLLLights() {
 
 // lights for Siren
 void sirenLED() {
-  switch(seconds){
-  case 0:
+  switch(note){
+  case 'c':
     P1OUT &= ~LED_GREEN;
     P1OUT &= ~LED_RED;
     break;
-  case 10:
+  case 'a':
     P1OUT &= ~LED_GREEN;
     P1OUT |= LED_RED;
     break;
-  case 20:
+  case 'l':
     P1OUT |= LED_GREEN;
     P1OUT &= ~LED_RED;
     break;
-  case 30:
+  case 'f':
     P1OUT &= ~LED_GREEN;
     P1OUT &= ~LED_RED;
     break;
   default:
-    note = 0;
+    P1OUT &= ~LED_GREEN;
+    P1OUT &= ~LED_RED;
     break;
   }  
 }
@@ -61,17 +62,21 @@ void sirenLED() {
 // lights for 
 void song3LED() {
   switch(note) {
-  case 'a':
+  case 'e':
     P1OUT |= LED_GREEN;
     P1OUT &= ~LED_RED;
     break;
-  case 'b':
+  case 'x':
     P1OUT |= LED_GREEN;
     P1OUT |= LED_RED;
     break;
-  case 'c':
+  case 'g':
     P1OUT &= ~LED_GREEN;
     P1OUT |= LED_RED;
+    break;
+  case 'l':
+    P1OUT ^= LED_GREEN;
+    P1OUT ^= LED_RED;
     break;
   default:
     P1OUT &= ~LED_GREEN;

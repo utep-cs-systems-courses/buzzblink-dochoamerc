@@ -41,10 +41,9 @@ switch(buttonState) {
     playMLL();
     break;
   case 2:
-    sirenLED();
+    playSiren();
     break;
   case 3:
-    //    superMarioTheme();
     play3();
     break;
   case 4:
