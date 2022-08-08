@@ -2,6 +2,7 @@
 #include <msp430.h>
 #include "libTimer.h"
 #include "led.h"
+
 extern void blinkUpdate();
 
 int main(void) {

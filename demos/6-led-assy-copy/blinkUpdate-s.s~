@@ -1,0 +1,21 @@
+	.arch msp430g2553
+	.p2align 1,0
+	.text
+
+	.global blinkUpdate
+	.extern blinkLimit
+
+blinkCount:	.word 0
+
+blinkUpdate:
+	add #1, &blinkCount
+	cmp &blinkCount, &blinkLimit	;bl - bc jnc
+	jnc fi
+	mov #0, &blinkCount
+	#call greenControl
+	jmp end
+
+fi:
+	#call greenControl
+	
+	
