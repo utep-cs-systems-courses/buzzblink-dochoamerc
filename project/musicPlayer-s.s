@@ -37,7 +37,7 @@ jt:	.word default
 	.extern buttonState
 
 player:
-	cmp &buttonState, #4	;4 - buttonState
+	cmp #4, &buttonState	;buttonState-4
 	jnc default
 
 	mov &buttonState, r12
