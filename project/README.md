@@ -2,7 +2,8 @@ This program can be compiled with the "make" instruction.
 
 To clean - "make clean"
 
-To run - "make load"
+To run C - "make load-c"
+To run Assembly - "make load-s"
 
 It will notice button presses.
 
